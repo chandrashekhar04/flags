@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flags</title>
+  <link rel="stylesheet" href="flag.css">
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="flag">
+            <div id="input">
+                <label for="">Country Name's</label><input type="text" placeholder="Enter Country Name">
+            </div>
+    
+            <div id="button">
+                <button type="submit">Get Country Flag</button>
+            </div>
+        </div>
+
+        <div id="img"></div>
+    </div>
+
+
+<script>
+    let input = document.querySelector("input")
+    let button = document.querySelector("button")
+    let flag = document.querySelector("#img")
+
+    button.onclick= function(e){
+        e.preventDefault()
+        let countryLower = input.value.toLowerCase()
+        let countryNamesplitted = countryLower.split('')
+        let countryUpper = countryNamesplitted[0].toUpperCase()
+        countryNamesplitted.splice(0,1, countryUpper)
+        let countryName=countryNamesplitted.join('')
+
+        // fetch('https://flagcdn.com/en/codes.json')
+        // .then(response => response.json())
+        // .then(result => console.log(result))
+
+        fetch('https://flagcdn.com/en/codes.json')
+        .then((Response)=>{return Response.json()})
+        .then((result) => data(result, countryLower))
+
+        function data(result, countryLower){
+            for(let code in result){
+                if(result[code]=== countryName){
+                    let img= document.createElement('img')
+                    img.src='https://flagcdn.com/256x192/'+code+'.png'
+                    flag.appendChild(img)
+                }
+                else{
+                    flag.innerHTML="Please Write A Valid Country Name."
+                }
+            }
+        }
+
+        // function forDelete(){
+            let oldFlag=Array.from(flag.children)
+            if(oldFlag.length > 0){
+                oldFlag.forEach(flg=>{
+                    flg.remove()
+                })
+            }
+        // }
+    }
+</script>
+
+</body>
+
+</html>
